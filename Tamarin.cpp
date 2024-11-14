@@ -508,11 +508,10 @@ void question18() {
 	cout << "Enter number: " << endl;
 	cin >> number;
 
-	while (number > c) {
-		biggestN = c;
-		c = a + b;
+	for(int i = c; number > i; i = a + b){
+		biggestN = i;
 		a = b;
-		b = c;
+		b = i;
 	}
 
 	cout << biggestN;
