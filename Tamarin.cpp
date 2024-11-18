@@ -1,10 +1,12 @@
-﻿#include <iostream>
+#include <iostream>
 #include <math.h>
+#include <random>
+
 using namespace std;
 
 void question1(), question2(), question3(), question4(), question5(), question6(), question7(), question8(), question9(), question10(),
-	 question11(), question12(), question13(), question14(), question15(), question16a(), question16b(), question16c(), question16d(),
-	 question17a(), question17b(), question18(), question19();
+question11(), question12(), question13(), question14(), question15(), question16a(), question16b(), question16c(), question16d(),
+question17a(), question17b(), question18(), question19(), game();
 
 
 void main() {
@@ -30,7 +32,8 @@ void main() {
 	//question17a();
 	//question17b();
 	//question18();
-	question19();
+	//question19();
+	game();
 	//cin.get();
 	//cin.ignore();
 
@@ -94,9 +97,6 @@ void question3() {
 		c = a + b;
 		a = b;
 		b = c;
-
-
-
 	}
 
 
@@ -164,8 +164,13 @@ void question6() {
 
 		int asciiCode = int(ch);
 
+		char prevChar = char(asciiCode - 1);
+		char nextChar = char(asciiCode + 1);
+
 		cout << "char: " << ch << endl;
 		cout << "asciiCode: " << asciiCode << endl;
+		cout << "prev char: " << prevChar << endl;
+		cout << "next char: " << nextChar << endl << endl;
 
 
 		cout << "Enter char: " << endl;
@@ -391,7 +396,7 @@ void question15() {
 			}
 		}
 		if (sum == i) {
-			cout  << i << endl;
+			cout << i << endl;
 		}
 	}
 }
@@ -420,7 +425,7 @@ void question16b() {
 
 
 	for (int i = 1; i <= n; i++) {
-		if( i % 2 == 0) sum -= (1.0 / i);
+		if (i % 2 == 0) sum -= (1.0 / i);
 		else sum += (1.0 / i);
 	}
 
@@ -431,11 +436,10 @@ void question16c() {
 
 	double sum = 0.0;
 
-
 	for (int i = 100; i >= 1; i = i - 2) {
 		//cout << "("<<i-1<<" + "<<i<<")"<<" / ("<< i << " * "<< i-1 << ")" << endl;
 
-		sum = sum + ((double(i) + double(i - 1)) / (double(i) * double(i - 1)));
+		sum = sum + ((double(i) * double(i - 1)) / (double(i) + double(i - 1)));
 	}
 
 	cout << "sum is => " << sum;
@@ -443,7 +447,7 @@ void question16c() {
 
 void question16d() {
 
-	int n,x;
+	int n, x;
 	double sum = 0;
 	cout << "Enter n: ";
 	cin >> n;
@@ -451,15 +455,12 @@ void question16d() {
 	cin >> x;
 
 	for (int i = 1; i <= n; i++) {
-		int f = 1;
+		float f = 1;
 		for (int j = 1; j <= i; j++) {
 			f *= j;
 		}
-
 		//cout << "(" << x << " ^ " << i << " / " << i << "!)" << endl;
-
-
-		sum += pow(x,(i/f));
+		sum += pow(x, (i / f));
 	}
 
 	cout << "sum is => " << sum;
@@ -474,7 +475,7 @@ void question17a() {
 		for (int j = 1; j <= i; j++) {
 			cout << j << " ";
 		}
-		for (int k = i-1; k >= 1; k--) {
+		for (int k = i - 1; k >= 1; k--) {
 			cout << k << " ";
 		}
 		cout << endl;
@@ -508,7 +509,7 @@ void question18() {
 	cout << "Enter number: " << endl;
 	cin >> number;
 
-	for(int i = c; number > i; i = a + b){
+	for (int i = c; number > i; i = a + b) {
 		biggestN = i;
 		a = b;
 		b = i;
@@ -520,15 +521,15 @@ void question18() {
 }
 
 void question19() {
-	for (int i = 5; i >  0; i--) {
+	for (int i = 5; i > 0; i--) {
 		for (int j = i; j >= 1; j--) {
 			cout << j << " ";
 		}
 		cout << endl;
 
 	}
-	
-	for (int i = 9; i > 0; i-=2) {
+
+	for (int i = 9; i > 0; i -= 2) {
 		for (int j = i; j >= 1; j -= 2) {
 			cout << j << " ";
 		}
@@ -537,6 +538,97 @@ void question19() {
 	}
 }
 
+void game() {
+	int randomNums[3];
+	string states[3];
+	int enterdNums[3];
+	for (int i = 0; i < 3; i++) {
+		random_device rd;
+		mt19937 gen(rd());
+		uniform_int_distribution<> distr(1, 9);
+	    bool isNumUsedBefore = false;
+		int a = distr(gen);
+        for (int j = 0; j < i; j++) {
+			if (a == randomNums[j]) isNumUsedBefore = true;
+		}
+		if (!isNumUsedBefore)randomNums[i] = a;
+		else i--;
+
+	}
+
+	int timesTried = 1;
+	bool isGameOver = false;
+	while (timesTried <= 10 && !isGameOver) {
+		isGameOver = true;
+
+
+		for (int i = 0; i < 3; i++) {
+			states[i] = "n";
+		}
+		for (int i = 0; i < 3; i++) {
+			cout << "Enter number " << endl;
+			cin >> enterdNums[i];
+		}
+
+
+		for (int i = 0; i < 3; i++) {
+			int eNum = enterdNums[i];
+			for (int j = 0; j < 3; j++) {
+				int rNum = randomNums[j];
+
+				if (rNum == eNum) {
+					if (i == j) {
+						states[i] = "cc";
+					}
+					else {
+						states[i] = "c";
+					}
+				}
+				else {
+					if (states[i] == "n")
+						states[i] = "r";
+				}
+			}
+		}
+		cout << "your answer: ";
+
+		for (int i = 0; i < 3; i++) {
+			string state = states[i];
+			int num = enterdNums[i];
+
+			if (state == "cc") {
+				cout << "\033[32m" << num << "\033[0m";
+				cout << "  ";
+			}
+			else if (state == "c") {
+				cout << "\033[34m" << num << "\033[0m";
+				cout << "  ";
+				isGameOver = false;
+			}
+			else {
+				cout << "\033[31m" << num << "\033[0m";
+				cout << "  ";
+				isGameOver = false;
+			}
+		}
+		cout << endl;
+		if (isGameOver) {
+			cout << "you won";
+		}
+
+		timesTried++;
+
+	}
+
+	if (timesTried == 11) {
+		cout << "you lost " << endl << "the answer was: ";
+		for (int i = 0; i < 3; i++) {
+			cout << randomNums[i] << "  ";
+		}
+
+	}
+
+}
 
 
 
